@@ -1,25 +1,23 @@
 <header class="p-3 w-full fixed top-0 z-50 bg-linear-to-r from-primary to-black">
   <div class="flex align-middle items-center px-10 mx-auto gap-6">
-    <a class="flex items-center gap-3 max-h-16 text-white border-r-white border-r-2 pr-6">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        class="size-6"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-          clip-rule="evenodd"
+    <div class="text-white">    
+    <a routerLink="/" routerLinkActive="text-accent"[routerLinkActiveOptions]="{exact: true}"
+    class="flex items-center gap-3 max-h-16 border-r-white border-r-2 pr-6">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+        <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd"
         />
       </svg>
 
-      <h3 class="text-2xl font-semibold text-white uppercase">Dating App</h3>
+      <h3 class="text-2xl font-semibold uppercase">Dating App</h3>
     </a>
+    </div>
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-      <a>Matches</a>
-      <a>Lists</a>
-      <a>Messages</a>
+      @if (accountService.currentUser();) {
+        <a routerLink="/members" routerLinkActive="text-accent">Matches</a>
+        <a routerLink="/lists" routerLinkActive="text-accent">Lists</a>
+        <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
+      }
+     
     </nav>
     <div class="flex align-middle ml-auto gap-3">
       @if (accountService.currentUser(); as user) {
