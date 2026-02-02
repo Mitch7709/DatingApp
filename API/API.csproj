@@ -18,7 +18,9 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Entities\" />
+    <Folder Include="Errors\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Middleware\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
