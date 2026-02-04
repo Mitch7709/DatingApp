@@ -9,12 +9,33 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
 {
     public async Task<Member?> GetMemberByIdAsync(string id)
     {
-        return await context.Members.FindAsync(id);
+        var member = await context.Members
+            .Include(m => m.Photos)
+            .FirstOrDefaultAsync(m => m.Id == id);
+        
+        if (member != null && member.Photos.Count > 0)
+        {
+            member.ImageUrl = member.Photos.First().Url;
+        }
+        
+        return member;
     }
 
     public async Task<IReadOnlyList<Member>> GetMembersAsync()
     {
-        return await context.Members.ToListAsync();
+        var members = await context.Members
+            .Include(m => m.Photos)
+            .ToListAsync();
+        
+        foreach (var member in members)
+        {
+            if (member.Photos.Count > 0)
+            {
+                member.ImageUrl = member.Photos.First().Url;
+            }
+        }
+        
+        return members;
     }
 
     public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)
