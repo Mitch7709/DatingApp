@@ -11,13 +11,18 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         var member = await context.Members
             .Include(m => m.Photos)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id); 
         
-        if (member != null && member.Photos.Count > 0)
+        if (member == null)
+        {
+            return null;
+        }
+
+        if (member.ImageUrl == null && member.Photos.Count > 0)
         {
             member.ImageUrl = member.Photos.First().Url;
         }
-        
+
         return member;
     }
 
@@ -25,6 +30,7 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     {
         return await context.Members
             .Include(x => x.User)
+            .Include(x => x.Photos)
             .SingleOrDefaultAsync(m => m.Id == id);
     }
 
