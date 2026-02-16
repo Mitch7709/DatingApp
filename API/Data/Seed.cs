@@ -50,6 +50,7 @@ public class Seed
                 Gender = memberDto.Gender,
                 Description = memberDto.Description,
                 City = memberDto.City,
+                ImageUrl = memberDto.ImageUrl,
                 Country = memberDto.Country
             };
 
