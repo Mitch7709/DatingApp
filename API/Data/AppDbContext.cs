@@ -9,10 +9,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AppUser> Users => Set<AppUser>();
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Photo> Photos => Set<Photo>();
+    public DbSet<MemberLike> Likes => Set<MemberLike>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<MemberLike>()
+            .HasKey(ml => new { ml.SourceMemberId, ml.TargetMemberId });
+
+        modelBuilder.Entity<MemberLike>()
+            .HasOne(ml => ml.SourceMember)
+            .WithMany(m => m.LikedMembers)
+            .HasForeignKey(ml => ml.SourceMemberId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<MemberLike>()
+            .HasOne(ml => ml.TargetMember)
+            .WithMany(m => m.LikedByMembers)
+            .HasForeignKey(ml => ml.TargetMemberId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
             v => v.ToUniversalTime(), // Convert to database format (UTC)
