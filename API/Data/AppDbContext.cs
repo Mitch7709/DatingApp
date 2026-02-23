@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Photo> Photos => Set<Photo>();
     public DbSet<MemberLike> Likes => Set<MemberLike>();
+    public DbSet<Message> Messages => Set<Message>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +30,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(m => m.LikedByMembers)
             .HasForeignKey(ml => ml.TargetMemberId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.MessagesSent)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Recipient)
+            .WithMany(u => u.MessagesReceived)
+            .HasForeignKey(m => m.RecipientId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
             v => v.ToUniversalTime(), // Convert to database format (UTC)
