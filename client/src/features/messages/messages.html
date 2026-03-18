@@ -49,7 +49,7 @@
               <div class="h-12 w-12 rounded">
                 <img
                   class="rounded-full"
-                  src="{{ isInbox ? message.senderPhotoUrl : message.recipientPhotoUrl }}"
+                  src="{{ isInbox ? message.senderPhotoUrl || '/user.png' : message.recipientPhotoUrl || '/user.png' }}"
                   alt="image of member"
                 />
               </div>

@@ -1,14 +1,19 @@
 <div class="flex flex-col w-full h-[72vh]">
   <div class="flex flex-col grow overflow-auto">
-    @for (message of messages(); track message.id) {
+    @for (message of messageService.messageThread(); track message.id) {
       <div
         class="chat"
         [class.chat-start]="!message.currentUserSender"
         [class.chat-end]="message.currentUserSender"
       >
-        <div class="chat-image avatar">
+        <div
+          class="chat-image avatar"
+          [class.avatar-online]="
+            presenceService.onlineUsers().includes(message.senderId || message.recipientId)
+          "
+        >
           <div class="w-10 rounded-full">
-            <img alt="Image of user" [src]="message.senderPhotoUrl" />
+            <img alt="Image of user" [src]="message.senderPhotoUrl || '/user.png'" />
           </div>
         </div>
         <div class="chat-header">
@@ -19,9 +24,9 @@
         @if (message.currentUserSender && message.dateRead) {
           <div class="chat-footer opacity-50">Seen {{ message.dateRead | timeAgo }}</div>
         } @else if (message.currentUserSender && !message.dateRead) {
-            <div class="chat-footer opacity-50">Not read</div>
+          <div class="chat-footer opacity-50">Not read</div>
         } @else {
-            <div class="chat-footer opacity-50">Sent {{ message.messageSent | timeAgo }}</div>
+          <div class="chat-footer opacity-50">Sent {{ message.messageSent | timeAgo }}</div>
         }
       </div>
     }
@@ -29,7 +34,12 @@
   </div>
 
   <div class="flex join w-full">
-    <input [(ngModel)]="messageContent" placeholder="Type a message..." class="input w-full" (keydown.enter)="sendMessage()" />
+    <input
+      [(ngModel)]="messageContent"
+      placeholder="Type a message..."
+      class="input w-full"
+      (keydown.enter)="sendMessage()"
+    />
     <button (click)="sendMessage()" type="submit" class="btn btn-primary join-item">Send</button>
   </div>
 </div>
