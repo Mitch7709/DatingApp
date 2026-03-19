@@ -25,9 +25,7 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
-builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-builder.Services.AddScoped<ILikesRepository, LikesRepository>();
-builder.Services.AddScoped<IMessageRepository, MessageRespository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<LogUserActivity>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddSignalR();

@@ -20,15 +20,6 @@ export class MemberCard {
 
   toggleLike(event: Event) {
     event.stopPropagation();
-    this.likeService.toggleLike(this.member().id).subscribe({
-      next: () => {
-        if (this.hasLiked()) {
-          this.likeService.likeIds.update(ids => ids.filter(id => id !== this.member().id));
-        } else {
-          this.likeService.likeIds.update(ids => [...ids, this.member().id]);
-        }
-      },
-      error: (err) => console.error('Failed to toggle like', err)
-    });
+    this.likeService.toggleLike(this.member().id)
   }
 }

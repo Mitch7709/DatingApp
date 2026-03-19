@@ -93,7 +93,8 @@
             <span>{{ user.displayName }}</span>
           </div>
           <ul
-            tabindex="-1"
+            (click)="handleSelectUserItem()"
+            tabindex="0"
             class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
           >
             <li><a routerLink="/members/{{ user.id }}">Edit Profile</a></li>
@@ -116,7 +117,12 @@
             class="input"
             placeholder="Password"
           />
-          <button type="submit" class="btn">Login</button>
+          <button type="submit" class="btn btn-primary">
+            @if (loading()) {
+              <span class="mr-2 loading loading-spinner"></span>
+            }            
+            Login
+          </button>
         </form>
       }
     </div>

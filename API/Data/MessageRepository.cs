@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class MessageRespository (AppDbContext context) : IMessageRepository
+public class MessageRepository (AppDbContext context) : IMessageRepository
 {
     public void AddGroup(Group group)
     {
@@ -87,10 +87,5 @@ public class MessageRespository (AppDbContext context) : IMessageRepository
     public async Task RemoveConnection(string connectionId)
     {
         await context.Connections.Where(c => c.ConnectionId == connectionId).ExecuteDeleteAsync();
-    }
-
-    public async Task<bool> SaveAllAsync()
-    {
-        return await context.SaveChangesAsync() > 0;
     }
 }

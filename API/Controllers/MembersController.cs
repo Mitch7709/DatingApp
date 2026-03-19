@@ -10,19 +10,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize]  
-    public class MembersController(IMemberRepository memberRepo, IPhotoService photoService) : BaseApiController
+    public class MembersController(IUnitOfWork uow, IPhotoService photoService) : BaseApiController
     {
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers([FromQuery] MemberParams memberParams)
         {
             memberParams.CurrentMemberId = User.GetMemberId();
-            return Ok(await memberRepo.GetMembersAsync(memberParams));
+            return Ok(await uow.MemberRepository.GetMembersAsync(memberParams));
         }
         
         [HttpGet("{id}")]
         public async Task<ActionResult<Member>> GetMember(string id)
         {
-            var member = await memberRepo.GetMemberByIdAsync(id);
+            var member = await uow.MemberRepository.GetMemberByIdAsync(id);
             if (member == null)
             {
                 return NotFound();
@@ -33,7 +33,7 @@ namespace API.Controllers
         [HttpGet("{id}/photos")]
         public async Task<ActionResult<IReadOnlyList<Photo>>> GetPhotosForMember(string id)
         {
-            var photos = await memberRepo.GetPhotosForMemberAsync(id);
+            var photos = await uow.MemberRepository.GetPhotosForMemberAsync(id);
             return Ok(photos);
         }
 
@@ -42,7 +42,7 @@ namespace API.Controllers
         {
             var memberId = User.GetMemberId();
 
-            var member = await memberRepo.GetMemberForUpdateAsync(memberId);
+            var member = await uow.MemberRepository.GetMemberForUpdateAsync(memberId);
             if (member == null)
             {
                 return BadRequest("Member not found");
@@ -55,8 +55,8 @@ namespace API.Controllers
 
             member.User.DisplayName = memberUpdateDto.DisplayName ?? member.User.DisplayName;
 
-            memberRepo.Update(member);
-            if (await memberRepo.SaveAllAsync())
+            uow.MemberRepository.Update(member);
+            if (await uow.Complete())
             {
                 return NoContent();
             }
@@ -66,7 +66,7 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<Photo>> AddPhoto([FromForm] IFormFile file)
         {
-            var member = await memberRepo.GetMemberForUpdateAsync(User.GetMemberId());
+            var member = await uow.MemberRepository.GetMemberForUpdateAsync(User.GetMemberId());
             if (member == null)
             {
                 return BadRequest("Member not found");
@@ -92,7 +92,7 @@ namespace API.Controllers
             }
 
             member.Photos.Add(photo);
-            if (await memberRepo.SaveAllAsync())
+            if (await uow.Complete())
             {
                 return photo;
             }
@@ -102,7 +102,7 @@ namespace API.Controllers
         [HttpPut("set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(int photoId)
         {
-            var member = await memberRepo.GetMemberForUpdateAsync(User.GetMemberId());
+            var member = await uow.MemberRepository.GetMemberForUpdateAsync(User.GetMemberId());
             if (member == null)
             {
                 return BadRequest("Member not found");
@@ -117,7 +117,7 @@ namespace API.Controllers
 
             member.ImageUrl = photo.Url;
             member.User.ImageUrl = photo.Url;
-            if (await memberRepo.SaveAllAsync())
+            if (await uow.Complete())
             {
                 return NoContent();
             }
@@ -127,7 +127,7 @@ namespace API.Controllers
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<ActionResult> DeletePhoto(int photoId)
         {
-            var member = await memberRepo.GetMemberForUpdateAsync(User.GetMemberId());
+            var member = await uow.MemberRepository.GetMemberForUpdateAsync(User.GetMemberId());
             if (member == null)
             {
                 return BadRequest("Member not found");
@@ -149,7 +149,7 @@ namespace API.Controllers
             }            
 
             member.Photos.Remove(photo);
-            if (await memberRepo.SaveAllAsync())
+            if (await uow.Complete())
             {
                 return Ok();
             }
