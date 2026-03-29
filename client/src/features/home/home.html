@@ -15,7 +15,9 @@
         <h1 class="text-5xl font-bold">Find your match</h1>
         <p class="py-6">Discover your perfect partner with our advanced matching algorithm.</p>
         <div class="flex items-center gap-3">
-          <button (click)="showRegister(true)" class="btn btn-primary btn-lg">Register</button>
+          @if (!accountService.currentUser()) {
+            <button (click)="showRegister(true)" class="btn btn-primary btn-lg">Register</button>
+          }
           <button class="btn btn-info btn-lg">Learn More</button>
         </div>
       </div>
