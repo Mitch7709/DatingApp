@@ -22,9 +22,15 @@
         <ul class="menu rounded-box w-full text-xl">
           <li>
             <a routerLink="profile" routerLinkActive="text-primary">Profile</a>
-            <a routerLink="photos" routerLinkActive="text-primary">Photos</a>
-            <a routerLink="messages" routerLinkActive="text-primary">Messages</a>
           </li>
+          <li>
+            <a routerLink="photos" routerLinkActive="text-primary">Photos</a>
+          </li>
+          @if (!isCurrentUser()) {
+            <li>
+              <a routerLink="messages" routerLinkActive="text-primary">Messages</a>
+            </li>
+          }
         </ul>
       </div>
       <div class="card-actions justify-between gap-2 px-2 mb-3">
@@ -35,7 +41,7 @@
           [class.btn-success]="!hasLiked()"
           class="btn flex-1"
         >
-          {{hasLiked() ? 'Unlike' : 'Like'}}
+          {{ hasLiked() ? 'Unlike' : 'Like' }}
         </button>
       </div>
     </div>

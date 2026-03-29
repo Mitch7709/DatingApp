@@ -64,7 +64,7 @@ export class AccountService {
             this.logout();
           }
         });
-    }, 5 * 60 * 1000); // Refresh every 5 minutes
+    }, 14 * 24 * 60 * 60 * 1000); // Refresh every 14 days
   }
 
   setCurrentUser(user: User) {

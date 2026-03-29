@@ -48,7 +48,7 @@ export class MemberList implements OnInit {
   }
 
   onClose() {
-    console.log('Modal closed');
+    // console.log('Modal closed');
   }
 
   onFilterChange(data: MemberParams) {
