@@ -39,7 +39,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasOne(ml => ml.TargetMember)
             .WithMany(m => m.LikedByMembers)
             .HasForeignKey(ml => ml.TargetMemberId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Sender)
